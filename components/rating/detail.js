@@ -2,29 +2,25 @@ import { useState, useEffect } from 'react'
 import { rateProduct } from '../../data/products'
 import { RatingsContainer } from './container'
 import { Header } from './header'
-
-export function Ratings({ average_rating, refresh, ratings = [], number_purchased, likes = [] }) {
+export function Ratings({ average_rating, refresh, ratingCount, number_purchased, number_of_likes }) {
   const [productId, setProductId] = useState(0)
   const saveRating = (newRating) => {
     rateProduct(productId, newRating).then(refresh)
-
   }
-
   useEffect(() => {
-    if (ratings.length) {
-      setProductId(ratings[0].product)
+    if (ratingCount) {
+      setProductId(ratingCount.product)
     }
-  }, [ratings])
-
+  }, [ratingCount])
   return (
     <div className="tile is-ancestor is-flex-wrap-wrap">
       <Header 
         averageRating={average_rating}
-        ratingsLen={ratings.length}
+        ratingsLen={ratingCount}
         numberPurchased={number_purchased}
-        likesLength={likes.length}
+        likesLength={number_of_likes}
       />
-      <RatingsContainer ratings={ratings} saveRating={saveRating} />
+      <RatingsContainer ratingCount={ratingCount} saveRating={saveRating} />
     </div>
   )
 }
