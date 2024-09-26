@@ -39,7 +39,7 @@ export default function ProductDetail() {
         <Detail product={product} like={like} unlike={unlike}/>
         <Ratings
           refresh={refresh}
-          number_purchased={product.number_purchased}
+          number_purchased={product.number_sold}
           ratings={product.ratings}
           average_rating={product.average_rating}
           likes={product.likes}
