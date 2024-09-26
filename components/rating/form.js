@@ -8,7 +8,7 @@ export default function RatingForm({ saveRating }) {
   const Rating = dynamic(
     () => import("react-simple-star-rating").then((mod) => mod.Rating),
     {
-      ssr: false,
+      ssr: true,
     }
   );
 

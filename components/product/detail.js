@@ -46,7 +46,7 @@ export function Detail({ product, like, unlike }) {
         <div className="tile is-parent">
           <article className="tile is-child">
             <figure className="image is-4by3">
-              <img src="https://bulma.io/images/placeholders/640x480.png"></img>
+              <img src={product.image_path}></img>
             </figure>
           </article>
         </div>
