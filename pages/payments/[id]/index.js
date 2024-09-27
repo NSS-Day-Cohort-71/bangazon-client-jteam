@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import CardLayout from '../components/card-layout'
-import Layout from '../components/layout'
-import Navbar from '../components/navbar'
-import AddPaymentModal from '../components/payments/payment-modal'
-import Table from '../components/table'
-import { addPaymentType, getPaymentTypes, deletePaymentType } from '../data/payment-types'
+import CardLayout from '../../../components/card-layout'
+import Layout from '../../../components/layout'
+import Navbar from '../../../components/navbar'
+import AddPaymentModal from '../../../components/payments/payment-modal'
+import Table from '../../../components/table'
+import { addPaymentType, deletePaymentType, getPaymentTypes } from '../../../data/payment-types'
 
 export default function Payments() {
   const headers = ['Merchant Name', 'Card Number', '']
@@ -70,13 +70,13 @@ export default function Payments() {
     <>
       <AddPaymentModal showModal={showModal} setShowModal={setShowModal} addNewPayment={addNewPayment} />
       <CardLayout title="Your Payment Methods">
-        {error && <div className="notification is-danger">{error}</div>} {/* Display error message */}
+        
         <Table headers={headers}>
           {
             payments.map(payment => (
               <tr key={payment.id}>
                 <td>{payment.merchant_name}</td>
-                <td>{payment.obscured_num}</td>
+                <td>{payment.account_number}</td>
                 <td>
                   <span className="icon is-clickable" onClick={() => removePayment(payment.id)}>
                     <i className="fas fa-trash"></i>
