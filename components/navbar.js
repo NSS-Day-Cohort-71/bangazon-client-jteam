@@ -30,7 +30,7 @@ export default function Navbar() {
         <div className="navbar-dropdown is-right">
           <Link href="/cart" className="navbar-item">Cart</Link>
           <Link href="/my-orders" className="navbar-item">My Orders</Link>
-          <Link href="/payments" className="navbar-item">Payment Methods</Link>
+          <Link href={`/payments/${profile.id}`} className="navbar-item">Payment Methods</Link>
           <Link href="/profile" className="navbar-item">Profile</Link>
           {
             profile.store ?
