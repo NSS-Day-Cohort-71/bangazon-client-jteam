@@ -10,16 +10,16 @@ import { getPaymentTypes } from '../data/payment-types'
 import { removeProductFromOrder } from '../data/products'
 
 export default function Cart() {
-  const [cart, setCart] = useState({})
+  const [cart, setCart] = useState(null)  // Set default to null to differentiate from empty
   const [paymentTypes, setPaymentTypes] = useState([])
   const [showCompleteForm, setShowCompleteForm] = useState(false)
   const router = useRouter()
 
   const refresh = () => {
     getCart().then(cartData => {
-      if (cartData) {
-        setCart(cartData)
-      }
+      setCart(cartData) // Set cart to the response (it could be null or empty)
+    }).catch(() => {
+      setCart(null)  // If there's an error (e.g., no cart found), set cart to null
     })
   }
 
@@ -49,11 +49,19 @@ export default function Cart() {
         completeOrder={completeOrder}
       />
       <CardLayout title="Your Current Order">
-        <CartDetail cart={cart} removeProduct={removeProduct} />
-        <>
-          <a className="card-footer-item" onClick={() => setShowCompleteForm(true)}>Complete Order</a>
-          <a className="card-footer-item">Delete Order</a>
-        </>
+        {cart && cart.lineitems && cart.lineitems.length > 0 ? ( // Check if cart has items
+          <>
+            <CartDetail cart={cart} removeProduct={removeProduct} />
+            <a className="card-footer-item" onClick={() => setShowCompleteForm(true)}>Complete Order</a>
+            <a className="card-footer-item">Delete Order</a>
+          </>
+        ) : (
+          // If no items in cart, show message and link to products page
+          <div className="has-text-centered">
+            <p>Your cart is currently empty.</p>
+            <a href="/products" className="button is-primary mt-4">Browse Products</a>
+          </div>
+        )}
       </CardLayout>
     </>
   )
