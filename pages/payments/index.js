@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import CardLayout from '../components/card-layout'
-import Layout from '../components/layout'
-import Navbar from '../components/navbar'
-import AddPaymentModal from '../components/payments/payment-modal'
-import Table from '../components/table'
-import { addPaymentType, getPaymentTypes, deletePaymentType } from '../data/payment-types'
+import CardLayout from '../../components/card-layout'
+import Layout from '../../components/layout'
+import Navbar from '../../components/navbar'
+import AddPaymentModal from '../../components/payments/payment-modal'
+import Table from '../../components/table'
+import { addPaymentType, getPaymentTypes, deletePaymentType } from '../../data/payment-types'
 
 export default function Payments() {
   const headers = ['Merchant Name', 'Card Number', '']
