@@ -32,9 +32,9 @@ export default function AddPaymentModal({ showModal, setShowModal, addNewPayment
         <button
           className="button is-success"
           onClick={() => addNewPayment({
-            acctNumber: acctNumInput.current.value,
-            merchant: merchantNameInput.current.value,
-            expDate: expDateInput.current.value
+            account_number: acctNumInput.current.value,
+            merchant_name: merchantNameInput.current.value,
+            expiration_date: expDateInput.current.value
           })}
         >Add Payment Method</button>
         <button className="button" onClick={() => setShowModal(false)}>Cancel</button>

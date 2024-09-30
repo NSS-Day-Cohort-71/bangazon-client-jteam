@@ -9,7 +9,7 @@ import Table from '../../components/table'
 import { addPaymentType, getPaymentTypes, deletePaymentType } from '../../data/payment-types'
 
 export default function Payments() {
-  const headers = ['Merchant Name', 'Card Number', '']
+  const headers = ['Merchant Name', 'Card Number', 'Expiration Date', '']
   const [payments, setPayments] = useState([])
   const [showModal, setShowModal] = useState(false)
   const [error, setError] = useState(null) // State to track errors
@@ -77,6 +77,7 @@ export default function Payments() {
               <tr key={payment.id}>
                 <td>{payment.merchant_name}</td>
                 <td>{payment.obscured_num}</td>
+                <td>{payment.expiration_date}</td>
                 <td>
                   <span className="icon is-clickable" onClick={() => removePayment(payment.id)}>
                     <i className="fas fa-trash"></i>
