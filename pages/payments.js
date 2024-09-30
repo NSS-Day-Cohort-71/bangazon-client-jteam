@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import CardLayout from '../../../components/card-layout'
-import Layout from '../../../components/layout'
-import Navbar from '../../../components/navbar'
-import AddPaymentModal from '../../../components/payments/payment-modal'
-import Table from '../../../components/table'
-import { addPaymentType, deletePaymentType, getPaymentTypes } from '../../../data/payment-types'
+import CardLayout from '../components/card-layout'
+import Layout from '../components/layout'
+import Navbar from '../components/navbar'
+import AddPaymentModal from '../components/payments/payment-modal'
+import Table from '../components/table'
+import { addPaymentType, getPaymentTypes, deletePaymentType } from '../data/payment-types'
 
 export default function Payments() {
   const headers = ['Merchant Name', 'Card Number', 'Expiration Date', '']
@@ -14,34 +14,19 @@ export default function Payments() {
   const [showModal, setShowModal] = useState(false)
   const [error, setError] = useState(null) // State to track errors
 
-  // Use the useRouter hook to get the id from the URL
-  const router = useRouter()
-  const { id } = router.query
 
-  const refresh = () => {
-    // Check if id is defined and valid (e.g., a number)
-    if (id && !isNaN(id)) {
-      getPaymentTypes(id)
+
+  useEffect(() => {
+    getPaymentTypes()
         .then((data) => {
-          if (data) {
             setPayments(data)
-            setError(null) // Clear any previous errors
-          } else {
-            setError('No payment data found.') // Handle no data case
-          }
+            setError(null) // Clear any previous errors  
         })
         .catch((err) => {
           console.error('Error fetching payment types:', err)
           setError('Failed to fetch payment types.') // Set error message
         })
-    } else {
-      setError('Invalid or missing ID.') // Handle invalid or missing ID
-    }
-  }
-
-  useEffect(() => {
-    refresh()
-  }, [id]) // Re-run refresh whenever the id changes
+  }, []) 
 
   const addNewPayment = (payment) => {
     addPaymentType(payment)
@@ -70,13 +55,12 @@ export default function Payments() {
     <>
       <AddPaymentModal showModal={showModal} setShowModal={setShowModal} addNewPayment={addNewPayment} />
       <CardLayout title="Your Payment Methods">
-        
         <Table headers={headers}>
           {
             payments.map(payment => (
               <tr key={payment.id}>
                 <td>{payment.merchant_name}</td>
-                <td>{payment.account_number}</td>
+                <td>{payment.obscured_num}</td>
                 <td>{payment.expiration_date}</td>
                 <td>
                   <span className="icon is-clickable" onClick={() => removePayment(payment.id)}>
