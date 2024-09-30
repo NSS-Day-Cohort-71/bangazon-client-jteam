@@ -32,8 +32,8 @@ export default function Cart() {
     })
   }, [])
 
-  const completeOrder = (paymentTypeId) => {
-    completeCurrentOrder(cart.id, paymentTypeId).then(() => router.push('/my-orders'))
+  const completeOrder = (payment_type) => {
+    completeCurrentOrder(cart.id, payment_type).then(() => router.push('/my-orders'))
   }
 
   const removeProduct = (productId) => {
