@@ -5,7 +5,10 @@ body {
     padding-top: 4.5rem;
 }
 
-.navbar.is-top {
-    z-index: 35;
-}
+.navbar.is-fixed-top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+  }
 
