@@ -38,26 +38,45 @@ export default function Profile() {
       <CardLayout title="Products you've recommended" width="is-full">
         <div className="columns is-multiline">
           {profile.recommends?.map((recommendation) => (
-            <ProductCard
-              product={recommendation.product}
-              key={recommendation.product.id}
-              width="is-one-third"
-            />
+            <div
+              key={`${recommendation.product.id}`}
+              className="column is-one-third"
+            >
+              <ProductCard
+                product={recommendation.product}
+                key={recommendation.product.id}
+                width="is-full"
+              />
+              <p className="has-text-grey mt-2">
+                Recommended to: {recommendation.customer.user.first_name}{" "}
+                {recommendation.customer.user.last_name}
+              </p>
+            </div>
           ))}
         </div>
-        <></>
       </CardLayout>
       <CardLayout title="Products recommended to you" width="is-full">
         <div className="columns is-multiline">
-          {profile.recommendations?.map((recommendation) => (
-            <ProductCard
-              product={recommendation.product}
-              key={recommendation.product.id}
-              width="is-one-third"
-            />
-          ))}
+          {profile.received_recommendations &&
+          profile.received_recommendations.length > 0 ? (
+            profile.received_recommendations.map((recommendation) => (
+              <div
+                key={`${recommendation.product.id}-${recommendation.recommender.id}`}
+                className="column is-one-third"
+              >
+                <ProductCard product={recommendation.product} width="is-full" />
+                <p className="has-text-grey mt-2">
+                  Recommended by: {recommendation.recommender.user.first_name}{" "}
+                  {recommendation.recommender.user.last_name}
+                </p>
+              </div>
+            ))
+          ) : (
+            <div className="column">
+              No products have been recommended to you yet.
+            </div>
+          )}
         </div>
-        <></>
       </CardLayout>
 
       <CardLayout title="Products you've liked" width="is-full">
