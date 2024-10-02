@@ -71,7 +71,9 @@ Cart.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Navbar />
-      <section className="container">{page}</section>
+      <section style={{ paddingTop: '4rem' }}>
+        {page}
+      </section>
     </Layout>
   )
 }
