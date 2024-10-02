@@ -12,6 +12,9 @@ Index.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Navbar />
+      <section style={{ paddingTop: '4rem' }}>
+        {page}
+      </section>
       {page}
     </Layout>
   )

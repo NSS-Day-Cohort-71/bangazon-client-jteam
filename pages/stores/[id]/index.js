@@ -71,7 +71,9 @@ StoreDetail.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Navbar />
-      {page}
+      <section style={{ paddingTop: '4rem' }}>
+        {page}
+      </section>
     </Layout>
   )
 }
