@@ -59,7 +59,7 @@ export default function Cart() {
           // If no items in cart, show message and link to products page
           <div className="has-text-centered">
             <p>Your cart is currently empty.</p>
-            <a href="/products" className="button is-primary mt-4">Browse Products</a>
+            <a href="/" className="button is-primary mt-4">Browse Products</a>
           </div>
         )}
       </CardLayout>

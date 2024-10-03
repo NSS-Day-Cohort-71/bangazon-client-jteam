@@ -89,7 +89,7 @@ export default function Navbar() {
 
       <div className="navbar-menu" ref={navbar}>
         <div className="navbar-start">
-          <Link href="/products" className="navbar-item">Products</Link>
+          <Link href="/" className="navbar-item">Products</Link>
           <Link href="/stores" className="navbar-item">Stores</Link>
         </div>
         <div className="navbar-end">
