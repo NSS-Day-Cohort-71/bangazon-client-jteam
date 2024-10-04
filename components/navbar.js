@@ -9,10 +9,14 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
+    console.log('Token changed:', token)
+    console.log('Profile:', profile)
     if (token) {
       setIsLoggedIn(true)
+    } else {
+      setIsLoggedIn(false)
     }
-  }, [token])
+  }, [token, profile])
 
   const showMobileNavbar = () => {
     hamburger.current.classList.toggle('is-active')
@@ -35,7 +39,7 @@ export default function Navbar() {
           {
             profile.store ?
               <>
-                <Link href={`/stores/${profile.store.id}`}><a className="navbar-item">View Your Store</a></Link>
+                <Link legacyBehavior href={`/stores/${profile.store.id}`}><a className="navbar-item">View Your Store</a></Link>
                 <Link href="/products/new" className="navbar-item">Add a new Product</Link>
               </>
               :
