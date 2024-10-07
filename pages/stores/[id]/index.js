@@ -16,11 +16,11 @@ export default function StoreDetail() {
   const [isOwner, setIsOwner] = useState(false)
 
   useEffect(() => {
+    if (parseInt(id) === profile.store?.id) {
+      setIsOwner(true)
+    }
     if (id) {
       refresh()
-    }
-    if (parseInt(id) === store?.id) {
-      setIsOwner(true)
     }
   }, [id, profile])
 
