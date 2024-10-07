@@ -1,6 +1,8 @@
 import Link from 'next/link'
+import { useEffect } from 'react'
 
 export default function Detail({ store, isOwner, favorite, unfavorite }) {
+
   const ownerButtons = () => {
     return (
       <div className="buttons">
@@ -44,9 +46,6 @@ export default function Detail({ store, isOwner, favorite, unfavorite }) {
         <nav className="navbar">
           <div className="navbar-menu">
             <div className="navbar-end">
-              <span className="navbar-item">
-
-              </span>
             </div>
           </div>
         </nav>
