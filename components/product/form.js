@@ -1,14 +1,8 @@
-import { useEffect, useState } from 'react'
-import { getCategories } from '../../data/products'
 import CardLayout from '../card-layout'
 import { Textarea, Select, Input } from '../form-elements'
 
-export default function ProductForm({ formEl, saveEvent, title, router }) {
-  const [categories, setCategories] = useState([])
 
-  useEffect(() => {
-    getCategories().then(catData => setCategories(catData))
-  }, [])
+export default function ProductForm({ categories, formEl, saveEvent, title, router }) {
 
   return (
     <CardLayout title={title}>
