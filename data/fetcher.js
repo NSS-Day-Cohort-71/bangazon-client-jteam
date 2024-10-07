@@ -8,7 +8,7 @@ const checkError = (res) => {
 }
 
 const checkErrorJson = (res) => {
-  if (!res.ok) { 
+  if (!res.ok) {
     throw Error(res.status);
   } else {
     return res.json();
