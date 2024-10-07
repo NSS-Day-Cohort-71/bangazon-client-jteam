@@ -9,8 +9,6 @@ export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
-    console.log('Token changed:', token)
-    console.log('Profile:', profile)
     if (token) {
       setIsLoggedIn(true)
     } else {
