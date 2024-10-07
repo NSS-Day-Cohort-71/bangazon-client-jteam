@@ -19,7 +19,7 @@ export default function StoreDetail() {
     if (id) {
       refresh()
     }
-    if (parseInt(id) === profile.store?.id) {
+    if (parseInt(id) === store?.id) {
       setIsOwner(true)
     }
   }, [id, profile])

@@ -18,19 +18,21 @@ export default function Detail({ store, isOwner, favorite, unfavorite }) {
       <>
         {
           store.is_favorite ?
-            <button className="button is-primary is-inverted" onClick={unfavorite}>
+            (<button className="button is-primary is-inverted" onClick={unfavorite}>
               <span className="icon is-small">
                 <i className="fas fa-heart-broken"></i>
               </span>
               <span>Unfavorite Store</span>
-            </button>
+            </button>)
             :
+            (
             <button className="button is-primary is-inverted" onClick={favorite}>
               <span className="icon is-small">
                 <i className="fas fa-heart"></i>
               </span>
               <span>Favorite Store</span>
             </button>
+            )
         }
       </>
     )
@@ -43,12 +45,7 @@ export default function Detail({ store, isOwner, favorite, unfavorite }) {
           <div className="navbar-menu">
             <div className="navbar-end">
               <span className="navbar-item">
-                {
-                  isOwner ?
-                    ownerButtons()
-                    :
-                    userButtons()
-                }
+
               </span>
             </div>
           </div>
@@ -61,7 +58,15 @@ export default function Detail({ store, isOwner, favorite, unfavorite }) {
         <p className="subtitle">
           {store.description}
         </p>
+        <div>
+          {isOwner ?
+            ownerButtons()
+            :
+            userButtons()
+          }
+        </div>
       </div>
     </section>
   )
 }
+
