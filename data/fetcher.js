@@ -8,12 +8,21 @@ const checkError = (res) => {
 };
 
 const checkErrorJson = async (res) => {
-  const data = await res.json();
+  const data = await res.json().catch((err) => {
+    console.error("Failed to parse JSON:", err);
+    return {}; // Return empty object if parsing fails
+  });
+
   if (!res.ok) {
-    // If the server sends error details, use them
-    const errorMessage = data.message || data.error || `Error: ${res.status}`;
+    console.error("Error Response:", data);
+
+    // Extract the error messages for specific fields, like 'price'
+    const errorMessage = data.price
+      ? data.price.join(" ")
+      : data.message || `Error: ${res.status}`;
     throw new Error(errorMessage);
   }
+
   return data;
 };
 

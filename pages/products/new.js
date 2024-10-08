@@ -43,24 +43,38 @@ export default function NewProduct({ categories }) {
 
     try {
       const response = await addProduct(product);
-      if (response && response.id) {
+
+      if (response.id) {
         router.push(`/products/${response.id}`);
       } else {
-        setError("Failed to create product. Please check your input.");
+        setError(
+          "Product creation failed. Please check your input and try again."
+        );
       }
     } catch (err) {
-      setError(err.message || "Failed to create product. Please try again.");
+      console.error("Error caught in saveProduct:", err);
+      // Use the error message from the caught error
+      setError(
+        err.message || "An unexpected error occurred. Please try again."
+      );
     }
   };
 
   return (
-    <ProductForm
-      formEl={formEl}
-      saveEvent={saveProduct}
-      title="Add a new product"
-      router={router}
-      categories={categories}
-    ></ProductForm>
+    <>
+      {error && (
+        <div style={{ color: "red", marginBottom: "1rem" }}>
+          {error} {/* Display error message */}
+        </div>
+      )}
+      <ProductForm
+        formEl={formEl}
+        saveEvent={saveProduct}
+        title="Add a new product"
+        router={router}
+        categories={categories}
+      />
+    </>
   );
 }
 
