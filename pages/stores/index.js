@@ -3,6 +3,7 @@ import Layout from '../../components/layout'
 import Navbar from '../../components/navbar'
 import { StoreCard } from '../../components/store/card'
 import { getStores } from '../../data/stores'
+import { ProductCard } from '../../components/product/card'
 
 
 export default function Stores() {
@@ -19,12 +20,23 @@ export default function Stores() {
   return (
     <>
       <h1 className="title">Stores</h1>
-      <div className="columns is-multiline">
-      {
+      <div className="store-list">
+       {
         stores.map(store => (
-          <StoreCard store={store} key={store.id} />
+          store.products.length > 0 && (
+            <div key={store.id} className="store-container">
+              <div className="store-card-wrapper">
+                <StoreCard store={store} />
+              </div>
+              <div className="columns is-multiline">
+                {store.products.map(product => (
+                    <ProductCard product={product} key={product.id}/>
+                ))}
+              </div>
+            </div>
+          )
         ))
-      }
+       } 
       </div>
     </>
   )

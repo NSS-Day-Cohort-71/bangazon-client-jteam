@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export function StoreCard({ store, width= "is-half" }) {
+export function StoreCard({ store, width= "is-full" }) {
   return (
     <div className={`column ${width}`}>
       <div className="card">
@@ -15,6 +15,9 @@ export function StoreCard({ store, width= "is-half" }) {
           </p>
           <div className="content">
             {store.description}
+          </div>
+          <div className="content">
+            {store.products.length} Items For Sale
           </div>
         </div>
         <footer className="card-footer">
