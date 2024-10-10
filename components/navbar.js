@@ -18,9 +18,17 @@ export default function Navbar() {
   }, [user]);
 
   const showMobileNavbar = () => {
-    hamburger.current.classList.toggle("is-active");
-    navbar.current.classList.toggle("is-active");
-  };
+    hamburger.current.classList.toggle('is-active')
+    navbar.current.classList.toggle('is-active')
+  }
+
+  const closeMobileNavbar = () => {
+    // Only collapse if navbar is currently active
+    if (navbar.current.classList.contains('is-active')) {
+      hamburger.current.classList.remove('is-active')
+      navbar.current.classList.remove('is-active')
+    }
+  }
 
   const getLoggedInButtons = () => {
     return (
@@ -31,42 +39,31 @@ export default function Navbar() {
           </span>
         </a>
         <div className="navbar-dropdown is-right">
-          <Link href="/cart" className="navbar-item">
-            Cart
-          </Link>
-          <Link href="/my-orders" className="navbar-item">
-            My Orders
-          </Link>
-          <Link href="/payments/" className="navbar-item">
-            Payment Methods
-          </Link>
-          <Link href="/profile" className="navbar-item">
-            Profile
-          </Link>
-          {user?.store ? (
-            <>
-              <Link legacyBehavior href={`/stores/${user.store.id}`}>
-                <a className="navbar-item">View Your Store</a>
-              </Link>
-              <Link href="/products/new" className="navbar-item">
-                Add a new Product
-              </Link>
-            </>
-          ) : (
-            <Link href="/stores/new" className="navbar-item">
-              Interested in selling?
-            </Link>
-          )}
+          <Link href="/cart" className="navbar-item" onClick={showMobileNavbar}>Cart</Link>
+          <Link href="/my-orders" className="navbar-item" onClick={closeMobileNavbar}>My Orders</Link>
+          <Link href="/payments/" className="navbar-item" onClick={closeMobileNavbar}>Payment Methods</Link>
+          <Link href="/profile" className="navbar-item" onClick={closeMobileNavbar}>Profile</Link>
+          {
+            profile.store ?
+              <>
+                <Link legacyBehavior href={`/stores/${profile.store.id}`}><a className="navbar-item" onClick={closeMobileNavbar}>View Your Store</a></Link>
+                <Link href="/products/new" className="navbar-item" onClick={closeMobileNavbar}>Add a new Product</Link>
+              </>
+              :
+              <Link href="/stores/new" className="navbar-item" onClick={closeMobileNavbar}>Interested in selling?</Link>
+          }
           <hr className="navbar-divider"></hr>
-          <a
-            className="navbar-item"
-            onClick={() => {
-              setUserToken(null);
-              setIsLoggedIn(false);
-            }}
-          >
-            Log out
-          </a>
+          <Link legacyBehavior href="/login">
+            <a className="navbar-item" onClick={
+              () => {
+                setUserToken(Null)
+                setIsLoggedIn(false)
+                closeMobileNavbar()
+              }}
+            >
+              Log out
+            </a>
+          </Link>
         </div>
       </div>
     );
@@ -120,12 +117,8 @@ export default function Navbar() {
 
       <div className="navbar-menu" ref={navbar}>
         <div className="navbar-start">
-          <Link href="/" className="navbar-item">
-            Products
-          </Link>
-          <Link href="/stores" className="navbar-item">
-            Stores
-          </Link>
+          <Link href="/" className="navbar-item" onClick={closeMobileNavbar}>Products</Link>
+          <Link href="/stores" className="navbar-item" onClick={closeMobileNavbar}>Stores</Link>
         </div>
         <div className="navbar-end">
           {isLoggedIn ? getLoggedInButtons() : getLoggedOutButtons()}
