@@ -44,14 +44,16 @@ export default function Navbar() {
               <Link href="/stores/new" className="navbar-item">Interested in selling?</Link>
           }
           <hr className="navbar-divider"></hr>
-          <a className="navbar-item" onClick={
-            () => {
-              localStorage.removeItem('token')
-              setIsLoggedIn(false)
-            }}
-          >
-            Log out
-          </a>
+          <Link legacyBehavior href="/login">
+            <a className="navbar-item" onClick={
+              () => {
+                localStorage.removeItem('token')
+                setIsLoggedIn(false)
+              }}
+            >
+              Log out
+            </a>
+          </Link>
         </div>
       </div>
     )
