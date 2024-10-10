@@ -1,26 +1,36 @@
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useRef } from 'react'
-import { Input } from '../components/form-elements'
-import Layout from '../components/layout'
-import Navbar from '../components/navbar'
-import { useAppContext } from '../context/state'
-import { register } from '../data/auth'
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useRef } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { Input } from "../components/form-elements";
+import Layout from "../components/layout";
+import Navbar from "../components/navbar";
+import { register } from "../data/auth";
+import { useUserQuery } from "./userQueries";
 
 export default function Register() {
-  const {setToken} = useAppContext()
+  const { setUserToken } = useUserQuery();
+  const router = useRouter();
+  const firstName = useRef("");
+  const lastName = useRef("");
+  const username = useRef("");
+  const email = useRef("");
+  const address = useRef("");
+  const phoneNumber = useRef("");
+  const password = useRef("");
 
-  const firstName = useRef('')
-  const lastName = useRef('')
-  const username = useRef('')
-  const email = useRef('')
-  const address = useRef('')
-  const phoneNumber = useRef('')
-  const password = useRef('')
-  const router = useRouter()
+  const registerMutation = useMutation({
+    mutationFn: register,
+    onSuccess: (data) => {
+      if (data.token) {
+        setUserToken(data.token);
+        router.push("/");
+      }
+    },
+  });
 
   const submit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const user = {
       username: username.current.value,
@@ -30,21 +40,15 @@ export default function Register() {
       email: email.current.value,
       address: address.current.value,
       phone_number: phoneNumber.current.value,
+    };
 
-    }
-
-    register(user).then((res) => {
-      if (res.token) {
-        setToken(res.token)
-        router.push('/')
-      }
-    })
-  }
+    registerMutation.mutate(user);
+  };
 
   return (
     <div className="columns is-centered">
       <div className="column is-half">
-        <form className="box">
+        <form className="box" onSubmit={submit}>
           <h1 className="title">Welcome!</h1>
           <Input
             id="firstName"
@@ -52,31 +56,10 @@ export default function Register() {
             type="text"
             label="First Name"
           />
-          <Input
-            id="lastName"
-            refEl={lastName}
-            type="text"
-            label="Last Name"
-          />
-
-          <Input
-            id="username"
-            refEl={username}
-            type="text"
-            label="Username"
-          />
-          <Input
-            id="email"
-            refEl={email}
-            type="email"
-            label="Email"
-          />
-          <Input
-            id="address"
-            refEl={address}
-            type="text"
-            label="Address"
-          />
+          <Input id="lastName" refEl={lastName} type="text" label="Last Name" />
+          <Input id="username" refEl={username} type="text" label="Username" />
+          <Input id="email" refEl={email} type="email" label="Email" />
+          <Input id="address" refEl={address} type="text" label="Address" />
           <Input
             id="phone_number"
             refEl={phoneNumber}
@@ -90,29 +73,43 @@ export default function Register() {
             label="Password"
           />
 
+          {registerMutation.isError && (
+            <p className="help is-danger">
+              Registration failed. Please try again.
+            </p>
+          )}
+
           <div className="field is-grouped">
             <div className="control">
-              <button className="button is-link" onClick={submit}>Submit</button>
+              <button
+                type="submit"
+                className={`button is-link ${
+                  registerMutation.isPending ? "is-loading" : ""
+                }`}
+                disabled={registerMutation.isPending}
+              >
+                Submit
+              </button>
             </div>
             <div className="control">
               <Link href="/login">
-                <button className="button is-link is-light">Cancel</button>
+                <button type="button" className="button is-link is-light">
+                  Cancel
+                </button>
               </Link>
             </div>
           </div>
         </form>
       </div>
     </div>
-  )
+  );
 }
 
 Register.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Navbar />
-      <section style={{ paddingTop: '4rem' }}>
-        {page}
-      </section>
+      <section style={{ paddingTop: "4rem" }}>{page}</section>
     </Layout>
-  )
-}
+  );
+};
