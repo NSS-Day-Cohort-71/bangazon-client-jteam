@@ -17,14 +17,13 @@ export default function Navbar() {
     } else {
       setIsLoggedIn(false);
     }
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024)
-    }
 
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
+    const mediaQuery = window.matchMedia('(max-width: 1024px)')
+    setIsMobile(mediaQuery.matches)
 
-    return () => window.removeEventListener('resize', checkMobile)
+    const handleMediaChange = (e) => setIsMobile(e.matches)
+
+    return () => window.removeEventListener('resize', handleMediaChange)
   }, [user])
 
   const showMobileNavbar = () => {
@@ -84,9 +83,9 @@ export default function Navbar() {
           <Link href="/payments/" className="navbar-item" onClick={handleNavItemClick}>Payment Methods</Link>
           <Link href="/profile" className="navbar-item" onClick={handleNavItemClick}>Profile</Link>
           {
-            profile.store ?
+            user.store ?
               <>
-                <Link href={`/stores/${profile.store.id}`} className="navbar-item" onClick={handleNavItemClick}>View Your Store</Link>
+                <Link href={`/stores/${user.store.id}`} className="navbar-item" onClick={handleNavItemClick}>View Your Store</Link>
                 <Link href="/products/new" className="navbar-item" onClick={handleNavItemClick}>Add a new Product</Link>
               </>
               :
@@ -96,7 +95,7 @@ export default function Navbar() {
           <Link legacyBehavior href="/login">
             <a className="navbar-item" onClick={
               () => {
-                setUserToken(Null)
+                setUserToken(null)
                 setIsLoggedIn(false)
                 closeMobileNavbar()
               }}
