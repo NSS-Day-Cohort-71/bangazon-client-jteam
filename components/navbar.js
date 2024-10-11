@@ -17,14 +17,13 @@ export default function Navbar() {
       setIsLoggedIn(false)
     }
 
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024)
-    }
+    const mediaQuery = window.matchMedia('(max-width: 1024px)')
+    setIsMobile(mediaQuery.matches)
 
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
+    const handleMediaChange = (e) => setIsMobile(e.matches)
 
-    return () => window.removeEventListener('resize', checkMobile)
+    mediaQuery.addEventListener('change', handleMediaChange)
+    return () => window.removeEventListener('resize', handleMediaChange)
   }, [token, profile])
 
   const showMobileNavbar = () => {
