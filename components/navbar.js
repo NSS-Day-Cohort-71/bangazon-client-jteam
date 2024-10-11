@@ -7,6 +7,8 @@ export default function Navbar() {
   const hamburger = useRef();
   const navbar = useRef();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -15,7 +17,15 @@ export default function Navbar() {
     } else {
       setIsLoggedIn(false);
     }
-  }, [user]);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024)
+    }
+
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [user])
 
   const showMobileNavbar = () => {
     hamburger.current.classList.toggle('is-active')
@@ -23,34 +33,64 @@ export default function Navbar() {
   }
 
   const closeMobileNavbar = () => {
-    // Only collapse if navbar is currently active
     if (navbar.current.classList.contains('is-active')) {
       hamburger.current.classList.remove('is-active')
       navbar.current.classList.remove('is-active')
     }
   }
 
+  const toggleDropdown = () => {
+    if (isMobile) {
+      setIsDropdownOpen(!isDropdownOpen)
+    }
+  }
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false)
+  }
+
+  const handleNavItemClick = () => {
+    closeDropdown()
+    closeMobileNavbar()
+  }
+
+  const handleDropdownMouseEnter = () => {
+    if (!isMobile) {
+      setIsDropdownOpen(true)
+    }
+  }
+
+  const handleDropdownMouseLeave = () => {
+    if (!isMobile) {
+      setIsDropdownOpen(false)
+    }
+  }
+
   const getLoggedInButtons = () => {
     return (
-      <div className="navbar-item has-dropdown is-hoverable">
-        <a className="navbar-link">
+      <div 
+        className={`navbar-item has-dropdown ${isDropdownOpen ? 'is-active' : ''}`}
+        onMouseEnter={handleDropdownMouseEnter}
+        onMouseLeave={handleDropdownMouseLeave}
+      >
+        <a className="navbar-link" onClick={toggleDropdown}>
           <span className="icon">
             <i className="fas fa-user-circle is-medium"></i>
           </span>
         </a>
         <div className="navbar-dropdown is-right">
-          <Link href="/cart" className="navbar-item" onClick={showMobileNavbar}>Cart</Link>
-          <Link href="/my-orders" className="navbar-item" onClick={closeMobileNavbar}>My Orders</Link>
-          <Link href="/payments/" className="navbar-item" onClick={closeMobileNavbar}>Payment Methods</Link>
-          <Link href="/profile" className="navbar-item" onClick={closeMobileNavbar}>Profile</Link>
+          <Link href="/cart" className="navbar-item" onClick={handleNavItemClick}>Cart</Link>
+          <Link href="/my-orders" className="navbar-item" onClick={handleNavItemClick}>My Orders</Link>
+          <Link href="/payments/" className="navbar-item" onClick={handleNavItemClick}>Payment Methods</Link>
+          <Link href="/profile" className="navbar-item" onClick={handleNavItemClick}>Profile</Link>
           {
             profile.store ?
               <>
-                <Link legacyBehavior href={`/stores/${profile.store.id}`}><a className="navbar-item" onClick={closeMobileNavbar}>View Your Store</a></Link>
-                <Link href="/products/new" className="navbar-item" onClick={closeMobileNavbar}>Add a new Product</Link>
+                <Link href={`/stores/${profile.store.id}`} className="navbar-item" onClick={handleNavItemClick}>View Your Store</Link>
+                <Link href="/products/new" className="navbar-item" onClick={handleNavItemClick}>Add a new Product</Link>
               </>
               :
-              <Link href="/stores/new" className="navbar-item" onClick={closeMobileNavbar}>Interested in selling?</Link>
+              <Link href="/stores/new" className="navbar-item" onClick={handleNavItemClick}>Interested in selling?</Link>
           }
           <hr className="navbar-divider"></hr>
           <Link legacyBehavior href="/login">
@@ -117,8 +157,8 @@ export default function Navbar() {
 
       <div className="navbar-menu" ref={navbar}>
         <div className="navbar-start">
-          <Link href="/" className="navbar-item" onClick={closeMobileNavbar}>Products</Link>
-          <Link href="/stores" className="navbar-item" onClick={closeMobileNavbar}>Stores</Link>
+          <Link href="/" className="navbar-item" onClick={handleNavItemClick}>Products</Link>
+          <Link href="/stores" className="navbar-item" onClick={handleNavItemClick}>Stores</Link>
         </div>
         <div className="navbar-end">
           {isLoggedIn ? getLoggedInButtons() : getLoggedOutButtons()}
