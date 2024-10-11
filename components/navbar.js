@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
-import { useUserQuery } from "../pages/userQueries";
+import { useUserQuery } from "../context/userQueries";
 
 export default function Navbar() {
   const { user, setUserToken } = useUserQuery();

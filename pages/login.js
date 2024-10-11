@@ -5,8 +5,9 @@ import { Input } from "../components/form-elements";
 import Layout from "../components/layout";
 import Navbar from "../components/navbar";
 import { login } from "../data/auth";
-import { useUserQuery } from "./userQueries";
+import { useUserQuery } from "../context/userQueries";
 import { useMutation } from "@tanstack/react-query";
+
 
 export default function Login() {
   const { setUserToken } = useUserQuery();

@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import Layout from "../../../components/layout";
 import Navbar from "../../../components/navbar";
 import { Detail } from "../../../components/product/detail";
 import { Ratings } from "../../../components/rating/detail";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getProductById,
   likeProduct,
@@ -13,31 +13,34 @@ import {
 export default function ProductDetail() {
   const router = useRouter();
   const { id } = router.query;
-  const [product, setProduct] = useState({});
+  const queryClient = useQueryClient();
 
-  const refresh = () => {
-    if (id) {
-      getProductById(id).then((productData) => {
-        if (productData) {
-          setProduct(productData);
-        }
-      });
-    }
-  };
+  const { data: product, refetch } = useQuery({
+    queryKey: ["product", id],
+    queryFn: () => getProductById(id),
+    enabled: !!id,
+  });
 
-  const like = () => {
-    likeProduct(id).then(refresh);
-  };
+  const likeMutation = useMutation({
+    mutationFn: likeProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["product", id] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
 
-  const unlike = () => {
-    unLikeProduct(id).then(refresh);
-  };
+  const unlikeMutation = useMutation({
+    mutationFn: unLikeProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["product", id] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
 
-  useEffect(() => {
-    refresh();
-  }, [id]);
+  const like = () => likeMutation.mutate(id);
+  const unlike = () => unlikeMutation.mutate(id);
 
-  if (!id) {
+  if (!id || !product) {
     return <div>Loading...</div>;
   }
 
@@ -47,7 +50,7 @@ export default function ProductDetail() {
         <Detail product={product} like={like} unlike={unlike} />
         <Ratings
           productId={id}
-          refresh={refresh}
+          refresh={refetch}
           number_purchased={product.number_sold}
           ratingCount={product.rating_count}
           average_rating={product.average_rating}

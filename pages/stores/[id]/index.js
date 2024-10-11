@@ -1,55 +1,68 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import Layout from "../../../components/layout";
 import Navbar from "../../../components/navbar";
 import { ProductCard } from "../../../components/product/card";
 import Detail from "../../../components/store/detail";
-import { useAppContext } from "../../../context/state";
+import CardLayout from "../../../components/card-layout";
+import { useUserQuery } from "../../../context/userQueries";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteProduct } from "../../../data/products";
 import {
   favoriteStore,
   getStoreById,
   unfavoriteStore,
 } from "../../../data/stores";
-import CardLayout from "../../../components/card-layout";
 
 export default function StoreDetail() {
-  const { profile } = useAppContext();
+  const { user: profile } = useUserQuery();
   const router = useRouter();
   const { id } = router.query;
-  const [store, setStore] = useState({});
   const [isOwner, setIsOwner] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { data: store } = useQuery({
+    queryKey: ["store", id],
+    queryFn: () => getStoreById(id),
+    enabled: !!id,
+  });
 
   useEffect(() => {
-    if (parseInt(id) === profile.store?.id) {
-      setIsOwner(true)
+    if (profile && store) {
+      setIsOwner(parseInt(id) === profile.store?.id);
     }
-    if (id) {
-      refresh();
-    }
-    if (parseInt(id) === profile.store?.id) {
-      setIsOwner(true);
-    }
-  }, [id, profile]);
+  }, [id, profile, store]);
 
-  const refresh = () =>
-    getStoreById(id).then((storeData) => {
-      if (storeData) {
-        setStore(storeData);
-      }
-    });
+  const deleteMutation = useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["store", id] });
+    },
+  });
 
-  const removeProduct = (productId) => {
-    deleteProduct(productId).then(refresh);
-  };
+  const favoriteMutation = useMutation({
+    mutationFn: favoriteStore,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["store", id] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
 
-  const favorite = () => {
-    favoriteStore(id).then(refresh);
-  };
+  const unfavoriteMutation = useMutation({
+    mutationFn: unfavoriteStore,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["store", id] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
 
-  const unfavorite = () => {
-    unfavoriteStore(id).then(refresh);
-  };
+  const removeProduct = (productId) => deleteMutation.mutate(productId);
+  const favorite = () => favoriteMutation.mutate(id);
+  const unfavorite = () => unfavoriteMutation.mutate(id);
+
+  if (!store) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

@@ -6,7 +6,7 @@ import { Input } from "../components/form-elements";
 import Layout from "../components/layout";
 import Navbar from "../components/navbar";
 import { register } from "../data/auth";
-import { useUserQuery } from "./userQueries";
+import { useUserQuery } from "../context/userQueries";
 
 export default function Register() {
   const { setUserToken } = useUserQuery();
