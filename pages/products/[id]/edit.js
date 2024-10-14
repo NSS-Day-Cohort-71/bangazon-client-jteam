@@ -1,48 +1,49 @@
-import { useRouter } from 'next/router'
-import { useRef, useEffect, useState } from 'react'
-import Layout from '../../../components/layout'
-import Navbar from '../../../components/navbar'
-import { editProduct, getProductById } from '../../../data/products'
-import ProductForm from '../../../components/product/form'
-import { useAppContext } from '../../../context/state'
+import { useRouter } from "next/router";
+import { useRef, useEffect, useState } from "react";
+import Layout from "../../../components/layout";
+import Navbar from "../../../components/navbar";
+import { editProduct, getProductById } from "../../../data/products";
+import ProductForm from "../../../components/product/form";
+import { useUserQuery } from "../../../context/userQueries";
 
 export default function NewProduct() {
-  const formEl = useRef()
-  const router = useRouter()
-  const [product, setProduct] = useState()
-  const { profile } = useAppContext()
-  const { id } = router.query
+  const formEl = useRef();
+  const router = useRouter();
+  const [product, setProduct] = useState();
+  const { user: profile } = useUserQuery();
+  const { id } = router.query;
 
   useEffect(() => {
     if (id && profile) {
-      getProductById(id).then(productData => {
+      getProductById(id).then((productData) => {
         if (productData) {
           if (productData.store.id === profile.store?.id) {
-            setProduct(productData)
+            setProduct(productData);
           } else {
-            router.back()
+            router.back();
           }
         }
-      })
+      });
     }
-  }, [id, profile])
+  }, [id, profile]);
 
   useEffect(() => {
     if (product) {
-      const { name, description, price, category, location, quantity } = formEl.current
+      const { name, description, price, category, location, quantity } =
+        formEl.current;
 
-      name.value = product.name
-      description.value = product.description
-      price.value = product.price
-      category.value = product.category.id
-      location.value = product.location
-      quantity.value = product.quantity
+      name.value = product.name;
+      description.value = product.description;
+      price.value = product.price;
+      category.value = product.category.id;
+      location.value = product.location;
+      quantity.value = product.quantity;
     }
-  }, [formEl, product])
-
+  }, [formEl, product]);
 
   const saveProduct = () => {
-    const { name, description, price, category, location, quantity } = formEl.current
+    const { name, description, price, category, location, quantity } =
+      formEl.current;
 
     const product = {
       name: name.value,
@@ -50,11 +51,11 @@ export default function NewProduct() {
       price: price.value,
       categoryId: category.value,
       location: location.value,
-      quantity: quantity.value
-    }
+      quantity: quantity.value,
+    };
 
-    editProduct(id, product).then(() => router.push(`/products/${id}`))
-  }
+    editProduct(id, product).then(() => router.push(`/products/${id}`));
+  };
 
   return (
     <ProductForm
@@ -63,16 +64,14 @@ export default function NewProduct() {
       title="Add a new product"
       router={router}
     ></ProductForm>
-  )
+  );
 }
 
 NewProduct.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Navbar />
-      <section style={{ paddingTop: '4rem' }}>
-        {page}
-      </section>
+      <section style={{ paddingTop: "4rem" }}>{page}</section>
     </Layout>
-  )
-}
+  );
+};
