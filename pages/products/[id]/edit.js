@@ -63,6 +63,7 @@ export default function NewProduct() {
       saveEvent={saveProduct}
       title="Add a new product"
       router={router}
+      categories={[]}
     ></ProductForm>
   );
 }
