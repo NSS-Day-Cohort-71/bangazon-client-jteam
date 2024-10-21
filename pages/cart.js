@@ -12,6 +12,7 @@ import {
 } from "../data/orders";
 import { getPaymentTypes } from "../data/payment-types";
 import { removeProductFromOrder } from "../data/products";
+import Link from "next/link";
 
 export default function Cart() {
   const [cart, setCart] = useState(null); // Set default to null to differentiate from empty
@@ -78,9 +79,9 @@ export default function Cart() {
           // If no items in cart, show message and link to products page
           <div className="has-text-centered">
             <p>Your cart is currently empty.</p>
-            <a href="/" className="button is-primary mt-4">
+            <Link href="/" className="button is-primary mt-4">
               Browse Products
-            </a>
+            </Link>
           </div>
         )}
       </CardLayout>
